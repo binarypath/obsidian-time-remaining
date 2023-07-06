@@ -1,13 +1,18 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, 
+	Plugin, PluginSettingTab, Setting } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
 	mySetting: string;
+	birthDate: string;
+	deathDate: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+	mySetting: 'default',
+	birthDate: '1977-01-01',
+	deathDate: '1977-01-01'
 }
 
 export default class MyPlugin extends Plugin {
@@ -131,6 +136,30 @@ class SampleSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					console.log('Secret: ' + value);
 					this.plugin.settings.mySetting = value;
+					await this.plugin.saveSettings();
+				}));
+		
+		new Setting(containerEl)
+			.setName('BirthDate')
+			.setDesc('Date of Birth')
+			.addText(text=>text
+				.setPlaceholder('Enter Your Date of Birth')
+				.setValue(this.plugin.settings.birthDate)
+				.onChange(async (value)=> {
+					console.log('Date of Birth: ' + value);
+					this.plugin.settings.birthDate = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('DeathDate')
+			.setDesc('Date of Death')
+			.addText(text=>text
+				.setPlaceholder('Enter Your Date of Death')
+				.setValue(this.plugin.settings.deathDate)
+				.onChange(async (value)=> {
+					console.log('Date of Death: ' + value);
+					this.plugin.settings.deathDate = value;
 					await this.plugin.saveSettings();
 				}));
 	}
