@@ -126,18 +126,6 @@ class WeeksLeftSettingsTab extends PluginSettingTab {
 		containerEl.createEl('h2', {text: 'WeeksLeft Settings'});
 
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
-		
-		new Setting(containerEl)
 			.setName('BirthDate')
 			.setDesc('Date of Birth')
 			.addText(text=>text
@@ -147,7 +135,7 @@ class WeeksLeftSettingsTab extends PluginSettingTab {
 					console.log('Date of Birth: ' + value);
 					this.plugin.settings.birthDate = value;
 					await this.plugin.saveSettings();
-				}));
+			}));
 
 		new Setting(containerEl)
 			.setName('DeathDate')
@@ -159,6 +147,6 @@ class WeeksLeftSettingsTab extends PluginSettingTab {
 					console.log('Date of Death: ' + value);
 					this.plugin.settings.deathDate = value;
 					await this.plugin.saveSettings();
-				}));
+			}));
 	}
 }
