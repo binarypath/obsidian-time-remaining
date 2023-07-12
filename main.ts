@@ -96,12 +96,12 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -115,34 +115,34 @@ class WeeksLeftSettingsTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'WeeksLeft Settings'});
+		containerEl.createEl('h2', { text: 'WeeksLeft Settings' });
 
 		new Setting(containerEl)
 			.setName('BirthDate')
 			.setDesc('Date of Birth')
-			.addText(text=>text
+			.addText(text => text
 				.setPlaceholder('Enter Your Date of Birth')
 				.setValue(this.plugin.settings.birthDate)
-				.onChange(async (value)=> {
+				.onChange(async (value) => {
 					console.log('Date of Birth: ' + value);
 					this.plugin.settings.birthDate = value;
 					await this.plugin.saveSettings();
-			}));
+				}));
 
 		new Setting(containerEl)
 			.setName('DeathDate')
 			.setDesc('Date of Death')
-			.addText(text=>text
+			.addText(text => text
 				.setPlaceholder('Enter Your Date of Death')
 				.setValue(this.plugin.settings.deathDate)
-				.onChange(async (value)=> {
+				.onChange(async (value) => {
 					console.log('Date of Death: ' + value);
 					this.plugin.settings.deathDate = value;
 					await this.plugin.saveSettings();
-			}));
+				}));
 	}
 }
