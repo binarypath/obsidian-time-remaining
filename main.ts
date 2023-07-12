@@ -1,16 +1,47 @@
-import { App, Editor, MarkdownView, Modal, Notice, 
-	Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-// Remember to rename these classes and interfaces!
+import {
+	App, Editor, MarkdownView, Modal, Notice, Command,
+	Plugin, PluginSettingTab, Setting
+} from 'obsidian';
 
 interface WeeksLeftSettings {
+	pastWeekCharacter: string;
+	pendingWeekCharacter: string;
+
 	birthDate: string;
 	deathDate: string;
+	birth: Date;
+	death: Date;
 }
 
 const DEFAULT_SETTINGS: WeeksLeftSettings = {
 	birthDate: '1977-01-01',
-	deathDate: '1977-01-01'
+	deathDate: '1977-01-01',
+	birth: new Date('1977-01-01'),
+	death: new Date('1977-01-01'),
+	pastWeekCharacter: '▪',
+	pendingWeekCharacter: '▫'
+}
+
+// TODO: move to class
+const MiniMapCommand: Command = {
+	id: "weeksleft-add-minimap",
+	name: "Add Minimap",
+	editorCallback: (editor: Editor, viewContext: MarkdownView) => {
+		console.log(editor.getSelection());
+		let deathWeek = 51;
+		let weeks = new Array(51)
+		let currentWeek = 20
+
+		for (let week = 0; week < deathWeek; week++) {
+			if (week <= currentWeek) {
+				weeks[week] = DEFAULT_SETTINGS.pastWeekCharacter;
+			} else {
+				weeks[week] = DEFAULT_SETTINGS.pendingWeekCharacter;
+			}
+		}
+
+		editor.replaceSelection(weeks.join(""));
+	}
 }
 
 export default class WeeksLeft extends Plugin {
@@ -31,42 +62,7 @@ export default class WeeksLeft extends Plugin {
 		const statusBarItemEl = this.addStatusBarItem();
 		statusBarItemEl.setText('Status Bar Text');
 
-		// This adds a simple command that can be triggered anywhere
-		this.addCommand({
-			id: 'open-sample-modal-simple',
-			name: 'Open sample modal (simple)',
-			callback: () => {
-				new SampleModal(this.app).open();
-			}
-		});
-		// This adds an editor command that can perform some operation on the current editor instance
-		this.addCommand({
-			id: 'sample-editor-command',
-			name: 'Sample editor command',
-			editorCallback: (editor: Editor, view: MarkdownView) => {
-				console.log(editor.getSelection());
-				editor.replaceSelection('Sample Editor Command');
-			}
-		});
-		// This adds a complex command that can check whether the current state of the app allows execution of the command
-		this.addCommand({
-			id: 'open-sample-modal-complex',
-			name: 'Open sample modal (complex)',
-			checkCallback: (checking: boolean) => {
-				// Conditions to check
-				const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (markdownView) {
-					// If checking is true, we're simply "checking" if the command can be run.
-					// If checking is false, then we want to actually perform the operation.
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-
-					// This command will only show up in Command Palette when the check function returns true
-					return true;
-				}
-			}
-		});
+		this.addCommand(MiniMapCommand);
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new WeeksLeftSettingsTab(this.app, this));
